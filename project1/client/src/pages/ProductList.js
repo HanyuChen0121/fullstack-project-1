@@ -4,34 +4,31 @@ const ProductList = () => {
     const [products, setProducts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [productsPerPage] = useState(10);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     
     const getData = async () => {
         
         try{
-            const response = await fetch('http://localhost:5000/api/products/getAllProducts', {
+            const response = await fetch('http://localhost:5000/api/products/all', {
               method: 'GET',
             });
         if (!response.ok) {
-            throw new Error('Network response was not ok.');
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const contentType = response.headers.get('content-type');
             if (contentType && contentType.indexOf('application/json') !== -1) {
                 const data = await response.json();
-                setProducts(data.products);
+                setProducts(data);
+                
             } else {
                 throw new Error('Response is not in JSON format.');
             }
-
-        setLoading(false);
+     
           } catch (error) {
-            setError(error.message);
+          
             console.log(error);
           }
     };
-    if (loading) return <p>Loading products...</p>;
-    if (error) return <p>Error: {error}</p>;
+    
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
     const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
