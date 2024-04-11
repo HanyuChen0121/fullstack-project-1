@@ -10,6 +10,7 @@ import SignUpPage from './pages/SignUpPage';
 import UpdatePasswordPage from './pages/UpdatePasswordPage';
 import SendEmailPage from './pages/SendEmailPage';
 import ProductList from './pages/ProductList';
+import CreateProduct from './pages/CreateProduct';
 function App() {
   return (
     <Router>
@@ -20,7 +21,7 @@ function App() {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/update-password" element={<UpdatePasswordPage />} />
           <Route path="/send-email" element={<SendEmailPage />} />
-          <Route path="/" element={<ProductList />} />
+          <Route path="/CreateProduct" element={<CreateProduct />} />
         </Routes>
       </div>
       <Footer />

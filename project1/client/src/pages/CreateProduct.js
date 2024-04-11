@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 const CreateProduct = () => {
     const [productName, setProductName] = useState('');
     const [productDescription, setProductDescription] = useState('');
@@ -60,6 +59,7 @@ const CreateProduct = () => {
             setStockQuantity('');
             setImageLink('');
             setImagePreview(null);
+            console.log("success");
           } catch (error) {
             console.log(error);
           }

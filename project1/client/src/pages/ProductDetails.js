@@ -1,25 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const ProductDetails = ({ productId }) => {
+const ProductDetails = ({ productName }) => {
     const [product, setProduct] = useState(null);
 
-    const handle = async(e) => {
-        e.preventDefault();
-        try{
-            const response = await fetch('http://localhost:5000/api/all', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ email, password })
-            });
+    const fetchProducts = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/products/${productName}');
+            setProduct(response.data);
+        } catch (error) {
+            console.error('Error fetching products:', error);
+        }
+    };
     
-            const data = await response.json();
-            
-    
-          } catch (error) {
-            console.log(error);
-          }
-    }
 
     if (!product) {
         return <div>Loading...</div>;
