@@ -1,0 +1,16 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+#root, body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content-wrap {
+    flex: 1;
+    /* Ensures that the footer can stick to the bottom */
+}
+  

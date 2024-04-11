@@ -8,23 +8,33 @@ const AuthForm = ({ action }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [type, setType] = useState('REGULAR'); // Default user type
+  const [loginError, setLoginError] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setLoginError('');
+
     if (action === 'signIn') {
+      try{
         const response = await fetch('http://localhost:5000/api/auth/signin', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
         });
 
         const data = await response.json();
         if (data.token) {
-            dispatch(setUser(data.id, data.token));
-            navigate('/');      // Redirect to home page
+          dispatch(setUser(data.id, data.token));
+          navigate('/');      // Redirect to home page
+        }else{
+          setLoginError(data.message || 'Login failed. Please try again.');
         }
+
+      } catch (error) {
+        setLoginError('Login failed. Please try again.');
+      }
     }
     
     if (action === 'signUp') {
@@ -107,6 +117,8 @@ const AuthForm = ({ action }) => {
 
       <button type="submit" className="btn btn-primary"> {getButtonText(action)} </button>
     </form>
+
+    {loginError && <div className="alert alert-danger" role="alert">{loginError}</div>}
     </>
   );
 };

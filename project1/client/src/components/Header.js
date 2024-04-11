@@ -6,11 +6,12 @@ import { Navbar, Nav, Container } from 'react-bootstrap';
 
 const Header = () => {
   // Use useSelector hook to get the state
-  const { userId, token } = useSelector(state => state.auth);
+  const { userId } = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
   const handleSubmit = async (e) =>{
     e.preventDefault();
+
     dispatch(removeUser());
   };
 
@@ -21,8 +22,6 @@ const Header = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            {/* <Nav.Link href="/signin">Sign In</Nav.Link>
-            <Nav.Link onClick={handleSubmit}>Sign Out</Nav.Link> */}
 
             {userId ? (<Nav.Link onClick={handleSubmit}>Sign Out</Nav.Link>) : (<Nav.Link href="/signin">Sign In</Nav.Link>)}
             
