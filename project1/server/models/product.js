@@ -21,7 +21,7 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    imagePreview: {
+    imageLink: {
         type: String,
         required: true
     }
