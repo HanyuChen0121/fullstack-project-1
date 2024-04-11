@@ -1,8 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/auth');
-const createProduct = require('./handlers/createProduct');
-const router = express.Router();
+const productRoutes = require('./routes/product');
 
 const cors = require('cors');
 
@@ -23,8 +22,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/api/auth', authRoutes);
-
-router.post('/api/products', createProduct);
+app.use('/api/products', productRoutes);
 
 // app.use((req, res, next) => {
 //     const err = new Error('Not Found');
