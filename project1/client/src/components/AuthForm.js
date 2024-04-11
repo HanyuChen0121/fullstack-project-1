@@ -40,12 +40,28 @@ const AuthForm = ({ action }) => {
       }
     }
 
-    
+    if (action === 'updatePassword'){
+      navigate('/send-email');
+    }
 
-    // Repeat the process for signIn and updatePassword with respective API endpoints
+  
+  };
+
+  function getButtonText(action) {
+    switch (action) {
+      case 'signUp':
+        return 'Sign Up';
+      case 'signIn':
+        return 'Sign In';
+      case 'updatePassword':
+        return 'Send';
+      default:
+        return 'Submit';
+    }
   };
 
   return (
+    <>
     <form onSubmit={handleSubmit}>
       <div className="mb-3">
         <label htmlFor="email" className="form-label">Email</label>
@@ -58,6 +74,8 @@ const AuthForm = ({ action }) => {
           required
         />
       </div>
+
+      {(action === 'signUp' || action === 'signIn') && (
       <div className="mb-3">
         <label htmlFor="password" className="form-label">Password</label>
         <input
@@ -69,6 +87,8 @@ const AuthForm = ({ action }) => {
           required
         />
       </div>
+      )}
+
       {action === 'signUp' && (
         <div className="mb-3">
           <label htmlFor="type" className="form-label">User Type</label>
@@ -84,8 +104,10 @@ const AuthForm = ({ action }) => {
           </select>
         </div>
       )}
-      <button type="submit" className="btn btn-primary">{action === 'signUp' ? 'Sign Up' : 'Sign In'}</button>
+
+      <button type="submit" className="btn btn-primary"> {getButtonText(action)} </button>
     </form>
+    </>
   );
 };
 

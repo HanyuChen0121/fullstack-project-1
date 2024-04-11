@@ -6,7 +6,8 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
-// import UpdatePasswordPage from './pages/UpdatePasswordPage';
+import UpdatePasswordPage from './pages/UpdatePasswordPage';
+import SendEmailPage from './pages/SendEmailPage';
 
 function App() {
   return (
@@ -16,7 +17,8 @@ function App() {
         <Routes>
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/signup" element={<SignUpPage />} />
-          {/* <Route path="/update-password" element={<UpdatePasswordPage />} /> */}
+          <Route path="/update-password" element={<UpdatePasswordPage />} />
+          <Route path="/send-email" element={<SendEmailPage />} />
           
         </Routes>
       </div>
