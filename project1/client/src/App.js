@@ -22,6 +22,8 @@ function App() {
           <Route path="/update-password" element={<UpdatePasswordPage />} />
           <Route path="/send-email" element={<SendEmailPage />} />
           <Route path="/CreateProduct" element={<CreateProduct />} />
+          <Route path="/ProductList" element={<ProductList />} />
+          
         </Routes>
       </div>
       <Footer />

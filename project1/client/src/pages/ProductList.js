@@ -1,30 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
 const ProductList = () => {
     const [products, setProducts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [productsPerPage] = useState(10);
-
-    useEffect(() => {
-        fetchProducts();
-    }, []);
-
-    const fetchProducts = async () => {
-        try {
-            const response = await axios.get('http://localhost:5000/api/products/all');
-            setProducts(response.data);
-        } catch (error) {
-            console.error('Error fetching products:', error);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    
+    const getData = async () => {
+        
+        try{
+            const response = await fetch('http://localhost:5000/api/products/getAllProducts', {
+              method: 'GET',
+            });
+        if (!response.ok) {
+            throw new Error('Network response was not ok.');
         }
-    };
+        const contentType = response.headers.get('content-type');
+            if (contentType && contentType.indexOf('application/json') !== -1) {
+                const data = await response.json();
+                setProducts(data.products);
+            } else {
+                throw new Error('Response is not in JSON format.');
+            }
 
+        setLoading(false);
+          } catch (error) {
+            setError(error.message);
+            console.log(error);
+          }
+    };
+    if (loading) return <p>Loading products...</p>;
+    if (error) return <p>Error: {error}</p>;
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
     const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
+    getData();
     return (
         <div>
             <h1>Product List</h1>

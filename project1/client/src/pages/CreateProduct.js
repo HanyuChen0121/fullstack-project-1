@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 const CreateProduct = () => {
     const [productName, setProductName] = useState('');
     const [productDescription, setProductDescription] = useState('');
-    const [category, setCategory] = useState('');
+    const [category, setCategory] = useState("Category 1");
     const [price, setPrice] = useState('');
     const [stockQuantity, setStockQuantity] = useState('');
     const [imageLink, setImageLink] = useState('');
@@ -22,7 +22,7 @@ const CreateProduct = () => {
     const handleUploadClick = async () => {
         
         try{
-            const response = await fetch('http://localhost:5000/api/products', {
+            const response = await fetch('http://localhost:5000/api/products/create', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ productName, productDescription, category, price, stockQuantity, imageLink })
@@ -36,7 +36,6 @@ const CreateProduct = () => {
             setStockQuantity('');
             setImageLink('');
             setImagePreview(null);
-            console.log("success");
           } catch (error) {
             console.log(error);
           }
