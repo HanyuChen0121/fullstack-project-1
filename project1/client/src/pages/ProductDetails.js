@@ -4,16 +4,22 @@ import axios from 'axios';
 const ProductDetails = ({ productId }) => {
     const [product, setProduct] = useState(null);
 
-    useEffect(() => {
-        // Fetch product data from MongoDB using Axios
-        axios.get(`http://localhost:5000/api/products/${productId}`)
-            .then((response) => {
-                setProduct(response.data);
-            })
-            .catch((error) => {
-                console.error('Error fetching product data:', error);
+    const handle = async(e) => {
+        e.preventDefault();
+        try{
+            const response = await fetch('http://localhost:5000/api/all', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email, password })
             });
-    }, [productId]);
+    
+            const data = await response.json();
+            
+    
+          } catch (error) {
+            console.log(error);
+          }
+    }
 
     if (!product) {
         return <div>Loading...</div>;

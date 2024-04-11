@@ -21,6 +21,7 @@ const CreateProduct = () => {
     };
 
     const handleUploadClick = async () => {
+        /** 
         try {
             const response = await axios.post('http://localhost:5000/api/products', {
                 productName,
@@ -43,6 +44,25 @@ const CreateProduct = () => {
         } catch (error) {
             console.error('Error uploading product:', error);
         }
+         */
+        try{
+            const response = await fetch('http://localhost:5000/api/products', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ productName, productDescription, category, price, stockQuantity, imageLink })
+            });
+    
+            const data = await response.json();
+            setProductName('');
+            setProductDescription('');
+            setCategory('');
+            setPrice('');
+            setStockQuantity('');
+            setImageLink('');
+            setImagePreview(null);
+          } catch (error) {
+            console.log(error);
+          }
     };
 
     return (
