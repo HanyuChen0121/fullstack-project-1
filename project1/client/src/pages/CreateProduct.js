@@ -20,30 +20,7 @@ const CreateProduct = () => {
     };
 
     const handleUploadClick = async () => {
-        /** 
-        try {
-            const response = await axios.post('http://localhost:5000/api/products', {
-                productName,
-                productDescription,
-                category,
-                price,
-                stockQuantity,
-                imageLink,
-                imagePreview, // Assuming you want to store the image preview as well
-            });
-            console.log('Product uploaded:', response.data);
-            // Reset form fields after successful upload
-            setProductName('');
-            setProductDescription('');
-            setCategory('');
-            setPrice('');
-            setStockQuantity('');
-            setImageLink('');
-            setImagePreview(null);
-        } catch (error) {
-            console.error('Error uploading product:', error);
-        }
-         */
+        
         try{
             const response = await fetch('http://localhost:5000/api/products', {
               method: 'POST',
