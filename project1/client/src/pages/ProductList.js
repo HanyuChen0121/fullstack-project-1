@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+import { Link } from 'react-router-dom';
 const ProductList = () => {
     const [products, setProducts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -47,8 +48,12 @@ const ProductList = () => {
             <h1>Product List</h1>
             {currentProducts.map((product) => (
                 <div key={product._id} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
-                    <img src={product.image} alt={product.name} style={{ width: '200px', height: '200px' }} />
-                    <h3>{product.productName}</h3>
+                    <div>
+                        <img src={product.image} alt={product.name} style={{ width: '200px', height: '200px' }}>
+                          
+                        </img>
+                    </div>
+                    <Link to={`/products/${product.id}`}>{product.productName}</Link>
                     <h3>{product.productDescription}</h3>
                     <p>Price: ${product.price}</p>
                     <button onClick={() => console.log('Add', product)}>Add</button>

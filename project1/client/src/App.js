@@ -24,7 +24,7 @@ function App() {
           <Route path="/send-email" element={<SendEmailPage />} />
           <Route path="/CreateProduct" element={<CreateProduct />} />
           <Route path="/ProductList" element={<ProductList />} />
-          <Route path="/ProductDetails" element={<ProductDetails />} />
+          
         </Routes>
       </div>
       <Footer />
