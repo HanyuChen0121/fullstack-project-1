@@ -1,22 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const ProductDetails = ({ productName }) => {
+const ProductDetails = ({ product }) => {
     const [product, setProduct] = useState(null);
-
-    const fetchProducts = async () => {
-        try {
-            const response = await axios.get('http://localhost:5000/api/products/${productName}');
-            setProduct(response.data);
-        } catch (error) {
-            console.error('Error fetching products:', error);
-        }
-    };
-    
-
-    if (!product) {
-        return <div>Loading...</div>;
-    }
 
     const { image, category, name, price, description } = product;
 

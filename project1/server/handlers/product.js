@@ -18,7 +18,7 @@ exports.getProduct = async function (req, res, next) {
   try {
 
         const product = await db.Product.findOne({ productName: req.body.productName}); 
-        return res.status(200).json({ product });
+        return res.status(200).json(products);
 
     } catch (err) {
       
@@ -31,7 +31,7 @@ exports.getAllProducts = async function (req, res, next) {
         if (!products || products.length === 0) {
           return res.status(404).json({ message: 'No products found' });
         }
-        return res.status(200).json({ product });
+        return res.status(200).json(products);
 
     } catch (err) {
       

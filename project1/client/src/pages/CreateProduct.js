@@ -42,7 +42,7 @@ const CreateProduct = () => {
     };
 
     return (
-        <div>
+        <div className="flex">
             <h1>Create Product</h1>
             <label>Product Name:</label>
             <input
