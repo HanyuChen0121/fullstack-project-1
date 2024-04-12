@@ -11,6 +11,7 @@ import UpdatePasswordPage from './pages/UpdatePasswordPage';
 import SendEmailPage from './pages/SendEmailPage';
 import ProductList from './pages/ProductList';
 import CreateProduct from './pages/CreateProduct';
+import ProductDetails from './pages/ProductDetails';
 function App() {
   return (
     <Router>
@@ -22,6 +23,8 @@ function App() {
           <Route path="/update-password" element={<UpdatePasswordPage />} />
           <Route path="/send-email" element={<SendEmailPage />} />
           <Route path="/CreateProduct" element={<CreateProduct />} />
+          <Route path="/ProductList" element={<ProductList />} />
+          
         </Routes>
       </div>
       <Footer />

@@ -1,24 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const ProductDetails = ({ productName }) => {
+const ProductDetails = ({ products }) => {
     const [product, setProduct] = useState(null);
 
-    const fetchProducts = async () => {
-        try {
-            const response = await axios.get('http://localhost:5000/api/products/${productName}');
-            setProduct(response.data);
-        } catch (error) {
-            console.error('Error fetching products:', error);
-        }
-    };
-    
 
-    if (!product) {
-        return <div>Loading...</div>;
-    }
-
-    const { image, category, name, price, description } = product;
 
     const handleAddToCart = () => {
         // Add to cart logic here
@@ -35,13 +21,12 @@ const ProductDetails = ({ productName }) => {
             <h1>Product Detail</h1>
             <div style={{ display: 'flex' }}>
                 <div style={{ marginRight: '20px' }}>
-                    <img src={image} alt={name} style={{ width: '200px', height: '200px' }} />
+                    <img src={product.imageLink} alt={products.imageLink} style={{ width: '200px', height: '200px' }} />
                 </div>
                 <div>
-                    <h2>{category}</h2>
-                    <h3>{name}</h3>
-                    <p>Price: ${price}</p>
-                    <p>{description}</p>
+                    <h2>{product.productName}</h2>
+                    <h3>{product.productDescription}</h3>
+                    <p>Price: {product.price}</p>
                     <button onClick={handleAddToCart}>Add to Cart</button>
                     <button onClick={handleEdit}>Edit</button>
                 </div>
