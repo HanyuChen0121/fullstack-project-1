@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { removeUser } from '../actions/authActions';
-import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Navbar, Nav, Container} from 'react-bootstrap';
 
 const Header = () => {
   // Use useSelector hook to get the state
@@ -21,11 +21,13 @@ const Header = () => {
         <Navbar.Brand href="/">Management Chwua</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
+          <Nav className="me-auto"> </Nav>
 
-            {userId ? (<Nav.Link onClick={handleSubmit}>Sign Out</Nav.Link>) : (<Nav.Link href="/signin">Sign In</Nav.Link>)}
-            
+          <Nav>
+            {userId ? (<Nav.Link className="ms-auto" onClick={handleSubmit} >Sign Out</Nav.Link>) : 
+                      (<Nav.Link className="ms-auto" href="/signin">Sign In</Nav.Link>)}
           </Nav>
+
         </Navbar.Collapse>
       </Container>
     </Navbar>
