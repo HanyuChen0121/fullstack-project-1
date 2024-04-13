@@ -53,7 +53,7 @@ const ProductList = () => {
                           
                         </img>
                     </div>
-                    <Link to={`/products/${product.id}`}>{product.productName}</Link>
+                    <Link to={`/product/${product._id}`}>View Details</Link>
                     <h3>{product.productDescription}</h3>
                     <p>Price: ${product.price}</p>
                     <button onClick={() => console.log('Add', product)}>Add</button>

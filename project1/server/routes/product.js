@@ -4,8 +4,8 @@ const { createProduct } = require('../handlers/product');
 const { getProduct } = require('../handlers/product');
 const { getAllProducts } = require('../handlers/product');
 
-router.post('/', createProduct);
-router.get('/name', getProduct);
+router.post('/create', createProduct);
+router.get('/name/:id', getProduct);
 router.get('/all', getAllProducts);
 
 module.exports = router;

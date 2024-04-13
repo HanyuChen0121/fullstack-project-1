@@ -16,9 +16,8 @@ exports.createProduct = async function (req, res, next) {
 
 exports.getProduct = async function (req, res, next) {
   try {
-
-        const product = await db.Product.findOne({ productName: req.body.productName}); 
-        return res.status(200).json(products);
+        const product = await db.Product.findOne({ _id: req.params.id}); 
+        return res.status(200).json(product);
 
     } catch (err) {
       

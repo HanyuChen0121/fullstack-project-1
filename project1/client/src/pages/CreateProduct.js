@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 const CreateProduct = () => {
     const [productName, setProductName] = useState('');
     const [productDescription, setProductDescription] = useState('');

@@ -23,8 +23,8 @@ function App() {
           <Route path="/update-password" element={<UpdatePasswordPage />} />
           <Route path="/send-email" element={<SendEmailPage />} />
           <Route path="/CreateProduct" element={<CreateProduct />} />
-          <Route path="/ProductList" element={<ProductList />} />
-          
+          <Route path="/" element={<ProductList />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
         </Routes>
       </div>
       <Footer />
