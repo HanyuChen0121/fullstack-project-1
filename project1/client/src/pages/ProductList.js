@@ -49,7 +49,7 @@ const ProductList = () => {
             {currentProducts.map((product) => (
                 <div key={product._id} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
                     <div>
-                        <img src={product.image} alt={product.name} style={{ width: '200px', height: '200px' }}>
+                        <img src={product.imageLink} alt={product.name} >
                           
                         </img>
                     </div>

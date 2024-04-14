@@ -11,3 +11,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.inValidInput {
+  border: 2px solid rgb(216, 50, 50);
+}

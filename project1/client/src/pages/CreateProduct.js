@@ -1,27 +1,69 @@
 import React, { useState } from 'react';
-
+import '../index.css';
+import { useNavigate } from 'react-router-dom';
+import { Alert } from 'react-bootstrap';
 const CreateProduct = () => {
     const [productName, setProductName] = useState('');
     const [productDescription, setProductDescription] = useState('');
     const [category, setCategory] = useState("Category 1");
     const [price, setPrice] = useState('');
+    const [isPriceValid, setPriceValid] = useState(true);
     const [stockQuantity, setStockQuantity] = useState('');
+    const [isStockQuantityValid, setIsStockQuantityValid] = useState(true);
     const [imageLink, setImageLink] = useState('');
-    const [imagePreview, setImagePreview] = useState(null);
-
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result);
-            };
-            reader.readAsDataURL(file);
-        }
+    const [isImageValid, setIsImageValid] = useState(true);
+    const [isNameValid, setNameIsValid] = useState(true)
+    const [nameError, setNameError] = useState('');
+    const [showError, setShowError] = useState(false);
+    const navigate = useNavigate();
+    const handleImageError = () => {
+        setIsImageValid(false); // Set isValid state to false when image fails to load
     };
 
+    const handleNameChange = (e) => {
+        const name = e.target.value.trim();
+        const nameRegex = /^[A-Za-z0-9 ]+$/;
+        setNameIsValid(nameRegex.test(name));
+        if (isNameValid) {
+            setProductName(e.target.value)
+            setNameError('')
+        } else {
+            setNameError('Please Enter valid product name with letters and numbers')
+        }
+    }
+    const handleStockChange = (e) => {
+        const stock = e.target.value;
+        if (!isNaN(stock)) {
+            // Update the stock state only if the input is a number
+            setStockQuantity(stock); 
+            setIsStockQuantityValid(true)
+        } else {
+            setIsStockQuantityValid(false)
+        }
+    }
+    const handlePriceChange = (e) => {
+        const price = e.target.value;
+        if (!isNaN(price)) {
+            // Update the stock state only if the input is a number
+            setPrice(price); 
+            setPriceValid(true)
+        } else {
+            setPriceValid(false)
+        }
+    }
     const handleUploadClick = async () => {
-        
+        if (!isNameValid || !isStockQuantityValid || !isPriceValid || !productName || !price || !imageLink || !stockQuantity) {
+            console.log(isImageValid)
+            console.log(isNameValid)
+            console.log(isStockQuantityValid)
+            console.log(isPriceValid)
+            console.log(productName)
+            console.log(price)
+            console.log(imageLink)
+            console.log(stockQuantity)
+            setShowError(true);
+            return;
+        }
         try{
             const response = await fetch('http://localhost:5000/api/products/create', {
               method: 'POST',
@@ -36,8 +78,9 @@ const CreateProduct = () => {
             setPrice('');
             setStockQuantity('');
             setImageLink('');
-            setImagePreview(null);
+            navigate('/');
           } catch (error) {
+            setShowError(true);
             console.log(error);
           }
     };
@@ -49,13 +92,17 @@ const CreateProduct = () => {
             <input
                 type="text"
                 value={productName}
-                onChange={(e) => setProductName(e.target.value)}
+                onChange={handleNameChange}
+                placeholder="Enter userName"
+                className = {nameError ? 'inValidInput' : ''}
             />
             <br />
+            {nameError && <p style={{ color: 'red' }}>{nameError}</p>}
 
             <label>Product Description:</label>
             <textarea
                 value={productDescription}
+                placeholder="Enter description"
                 onChange={(e) => setProductDescription(e.target.value)}
             />
             <br />
@@ -70,18 +117,26 @@ const CreateProduct = () => {
 
             <label>Price:</label>
             <input
-                type="number"
+                type="text"
                 value={price}
-                onChange={(e) => setPrice(e.target.value)}
+                onChange={handlePriceChange}
+                placeholder="Enter Price"
             />
+            {!isPriceValid && (
+                <p style={{color:'red'}}>Please enter a number</p>
+            )}
             <br />
 
             <label>In Stock Quantity:</label>
             <input
-                type="number"
+                type="text"
                 value={stockQuantity}
-                onChange={(e) => setStockQuantity(e.target.value)}
+                onChange={handleStockChange}
+                placeholder="Enter stock quantity"
             />
+            {!isStockQuantityValid && (
+                <p style={{color:'red'}}>Please enter a number</p>
+            )}
             <br />
 
             <label>Add Image Link:</label>
@@ -89,18 +144,39 @@ const CreateProduct = () => {
                 type="text"
                 value={imageLink}
                 onChange={(e) => setImageLink(e.target.value)}
+                placeholder='Enter img url'
             />
             <br />
 
-            <label>Upload Image:</label>
-            <input type="file" accept="image/*" onChange={handleImageChange} />
+            
             <br />
-            {imagePreview && (
-                <img src={imagePreview} alt="Product Preview" style={{ width: '200px' }} />
+            
+            {imageLink && (<img
+                src={imageLink}
+                alt={productName}
+                onError={handleImageError} // Call handleImageError when image fails to load
+            />)}
+             {imageLink && !isImageValid && (
+                <div style={{color: 'red'}}>
+                    <p>Please Enter a valid image Link</p>
+                </div>
+            )}
+            {!imageLink && (
+                <div style={{ border: '2px dashed gray', padding: '20px', width: '400px'}} className = "flex">
+                    
+                    <p>Please upload an image.</p>
+                
+                </div>
             )}
             <br />
 
-            <button onClick={handleUploadClick}>Upload</button>
+            <button onClick={handleUploadClick}>Add Product</button>
+            {showError && (
+                <Alert variant="danger" onClose={() => setShowError(false)} dismissible>
+                <Alert.Heading>Error</Alert.Heading>
+                <p>Failed to add product. Please try again.</p>
+                </Alert>
+            )}
         </div>
     );
 };

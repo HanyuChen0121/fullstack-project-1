@@ -4,7 +4,10 @@ import { useParams } from 'react-router-dom';
 const ProductDetails = ({ products }) => {
     const [product, setProduct] = useState(null);
     const { id } = useParams();
-
+    const [isValid, setIsValid] = useState(true); // State to track image validity
+    const handleImageError = () => {
+        setIsValid(false); // Set isValid state to false when image fails to load
+    };
     
     useEffect(() => {
         const fetchData = async () => {
@@ -52,7 +55,14 @@ const ProductDetails = ({ products }) => {
                 <div style={{ marginRight: '20px' }}>
                     
                 </div>
-                <div>
+                <div>  
+                    {isValid && (
+                        <img
+                         src={product.imageLink}
+                         alt={product.productName}
+                         onError={handleImageError} // Call handleImageError when image fails to load
+                       />
+                    )}
                     <h2>{product.productName}</h2>
                     <h3>{product.productDescription}</h3>
                     <p>Price: {product.price}</p>
