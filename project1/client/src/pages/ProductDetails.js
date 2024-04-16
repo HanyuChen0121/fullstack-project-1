@@ -36,8 +36,6 @@ const ProductDetails = ({ products }) => {
             fetchData();
         }, [id]);
         
-    console.log("here");
-    console.log(product);
     const handleAddToCart = () => {
         // Add to cart logic here
         console.log('Product added to cart:', product);

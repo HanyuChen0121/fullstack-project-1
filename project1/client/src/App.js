@@ -12,6 +12,7 @@ import SendEmailPage from './pages/SendEmailPage';
 import ProductList from './pages/ProductList';
 import CreateProduct from './pages/CreateProduct';
 import ProductDetails from './pages/ProductDetails';
+import EditProduct from './pages/EditProduct';
 function App() {
   return (
     <Router>
@@ -25,6 +26,7 @@ function App() {
           <Route path="/CreateProduct" element={<CreateProduct />} />
           <Route path="/" element={<ProductList />} />
           <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/product/edit/:id" element={<EditProduct />} />
         </Routes>
       </div>
       <Footer />

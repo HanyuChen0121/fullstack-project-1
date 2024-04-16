@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import '../index.css';
 const ProductList = () => {
     const [products, setProducts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [productsPerPage] = useState(3);
+    const [productsPerPage] = useState(10);
     useEffect(() => {
     const fetchData = async () => {
         
@@ -36,37 +37,48 @@ const ProductList = () => {
     /** */
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-    console.log(products);
     const currentProducts = Array.isArray(products) ? products.slice(indexOfFirstProduct, indexOfLastProduct) : [];
-    
+    const navigate = useNavigate();
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
+    const onClickAddProduct = () => {
+        navigate('/CreateProduct');
+    }
+    const onClickEdit = () => {
+        navigate('/CreateProduct');
+    }
     return (
         products.length > 0 ? (
         <div className="flex">
             <h1>Product List</h1>
-            {currentProducts.map((product) => (
-                <div key={product._id} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
-                    <div>
-                        <img src={product.imageLink} alt={product.name} >
-                          
-                        </img>
+            <button className="product-button" onClick={onClickAddProduct}>
+                Add Product
+            </button>
+            <div className="product-grid">
+                {currentProducts.map((product) => (
+                    <div key={product._id} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
+                        <div>
+                            <img src={product.imageLink} alt={product.name} >
+                            
+                            </img>
+                        </div>
+                        <Link to={`/product/${product._id}`}>View Details</Link>
+                        <h3>{product.productName}</h3>
+                        <h3>{product.productDescription}</h3>
+                        <p>Price: ${product.price}</p>
+                        <button onClick={() => console.log('Add', product)}>Add</button>
+                        <Link to={`/product/edit/${product._id}`}>Edit</Link>
                     </div>
-                    <Link to={`/product/${product._id}`}>View Details</Link>
-                    <h3>{product.productDescription}</h3>
-                    <p>Price: ${product.price}</p>
-                    <button onClick={() => console.log('Add', product)}>Add</button>
-                    <button onClick={() => console.log('Edit', product)}>Edit</button>
-                </div>
-            ))}
+                ))}
+            </div>
             <ul className="pagination">
                 {Array.from({ length: Math.ceil(products.length / productsPerPage) }, (_, index) => (
                     <li key={index}>
-                        <button onClick={() => paginate(index + 1)}>{index + 1}</button>
+                        <button className="product-button"onClick={() => paginate(index + 1)}>{index + 1}</button>
                     </li>
                 ))}
             </ul>
+            
         </div>
         ) :
         (<div>error</div>)
