@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-
+import '../index.css';
+import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../actions/cartActions';
+import { useNavigate } from 'react-router-dom';
 const ProductDetails = ({ products }) => {
+    const navigate = useNavigate();
     const [product, setProduct] = useState(null);
     const { id } = useParams();
     const [isValid, setIsValid] = useState(true); // State to track image validity
     const handleImageError = () => {
         setIsValid(false); // Set isValid state to false when image fails to load
     };
-    
+    const dispatch = useDispatch();
+    const onClickAddProduct = (product) => {
+        console.log(product)
+        dispatch(addToCart(product));;
+    }
     useEffect(() => {
         const fetchData = async () => {
             try{
@@ -36,40 +45,43 @@ const ProductDetails = ({ products }) => {
             fetchData();
         }, [id]);
         
-    const handleAddToCart = () => {
-        // Add to cart logic here
-        console.log('Product added to cart:', product);
-    };
 
     const handleEdit = () => {
         // Edit product logic here
         console.log('Edit product:', product);
     };
-
+    const handleEditClick = (product) => {
+        // Navigate to the edit product page
+        navigate(`/product/edit/${product._id}`);
+      };
     return ( product !== null  && (
-        <div>
+        <div className='flex'>
             <h1>Product Detail</h1>
             <div style={{ display: 'flex' }}>
-                <div style={{ marginRight: '20px' }}>
-                    
-                </div>
                 <div>  
                     {isValid && (
                         <img
-                         src={product.imageLink}
-                         alt={product.productName}
-                         onError={handleImageError} // Call handleImageError when image fails to load
+                           className='product-detial-img'
+                            src={product.imageLink}
+                            alt={product.productName}
+                            onError={handleImageError} // Call handleImageError when image fails to load
                        />
                     )}
+                </div>
+                <div className='product-details'>
+                    <p>Catagory1</p>
                     <h2>{product.productName}</h2>
+                    <h2>${product.price}</h2>
                     <h3>{product.productDescription}</h3>
                     <p>Price: {product.price}</p>
-                    <button onClick={handleAddToCart}>Add to Cart</button>
-                    <button onClick={handleEdit}>Edit</button>
+                    <button className="product-button" onClick={() => onClickAddProduct(product)}>Add to Cart</button>
+                    <button className="product-button" onClick={() => handleEditClick(product)}>Edit</button>
                 </div>
             </div>
         </div>)
     );
 };
-
-export default ProductDetails;
+const mapDispatchToProps = {
+    addToCart,
+}
+export default connect(null, mapDispatchToProps)(ProductDetails);

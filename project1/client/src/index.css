@@ -24,15 +24,36 @@ code {
 }
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 5 columns */
-  grid-template-rows: repeat(2, auto); /* 2 rows */
+  grid-template-columns: repeat(5, 1fr); /* Two columns */
+  grid-template-rows: repeat(2, auto);
   gap: 20px; /* Space between products */
   margin: 20px 0;
 }
+.product-grid img {
+  max-width: 100%; /* Ensure images do not exceed their container width */
+  max-height: 100%; /* Ensure images do not exceed their container height */
+  width: 200px; /* Set width to 200px */
+  height: 200px; /* Maintain aspect ratio */
+}
+.product-detial {
+  max-width: 100%; /* Ensure images do not exceed their container width */
+  max-height: 100%; /* Ensure images do not exceed their container height */
+  width: 200px; /* Set width to 200px */
+  height: auto;
+}
+.product-detial-img{
+  float: left;
+  max-width: 100%; /* Ensure images do not exceed their container width */
+  max-height: 100%; /* Ensure images do not exceed their container height */
+  width: 600px; /* Set width to 200px */
+  height: auto;
+}
+.product-details{
+  margin-left: 100px;
+}
 @media screen and (max-width: 768px) {
   .product-grid {
-      grid-template-columns: repeat(1, 1fr); /* 1 column for narrower screens */
-      grid-template-rows: auto; /* Auto rows */
-      margin-right: 5%;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjust item width for smaller screens */
   }
 }
+

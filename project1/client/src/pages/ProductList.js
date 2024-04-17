@@ -2,10 +2,40 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import '../index.css';
+import Cart from './Cart';
+import { connect } from 'react-redux';
+import { addToCart } from '../actions/cartActions';
+import { useDispatch } from 'react-redux';
+
 const ProductList = () => {
+
+    const dispatch = useDispatch();
     const [products, setProducts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [productsPerPage] = useState(10);
+    const [cartItems, setCartItems] = useState([]); // State to manage cart items
+    const [showCart, setShowCart] = useState(false); // State to control cart modal visibility
+    const [quantity, setQuantity] = useState(0);
+    const handleDecreaseQuantity = () => {
+        // Decrease quantity by 1 if greater than 1
+        if (quantity >= 1) {
+            setQuantity(quantity - 1);
+        }
+    };
+
+    const handleIncreaseQuantity = () => {
+        // Increase quantity by 1
+        setQuantity(quantity + 1);
+    };
+    // Function to open cart modal
+    const handleOpenCart = () => {
+        setShowCart(true);
+    };
+
+    // Function to close cart modal
+    const handleCloseCart = () => {
+        setShowCart(false);
+    };
     useEffect(() => {
     const fetchData = async () => {
         
@@ -41,33 +71,39 @@ const ProductList = () => {
     const navigate = useNavigate();
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
-    const onClickAddProduct = () => {
+    const onClickAddProduct = (product) => {
+        console.log("printing productproduct");
+        console.log(product);
+        dispatch(addToCart(product));;
+    }
+    const onClickAddProductButton = () => {
         navigate('/CreateProduct');
     }
-    const onClickEdit = () => {
-        navigate('/CreateProduct');
-    }
+    const handleEditClick = (product) => {
+        // Navigate to the edit product page
+        navigate(`/product/edit/${product._id}`);
+      };
     return (
         products.length > 0 ? (
-        <div className="flex">
-            <h1>Product List</h1>
-            <button className="product-button" onClick={onClickAddProduct}>
-                Add Product
+        <div className="flex" >
+            <h1>Products</h1>
+            <button className="product-button" style={{float: 'right'}} onClick={onClickAddProductButton}> Add product </button>
+            <button className="product-button" onClick={handleOpenCart}>
+                Open Cart
             </button>
-            <div className="product-grid">
+
+            {/* Cart modal */}
+            <Cart cartItems={cartItems} show={showCart} handleClose={handleCloseCart} />
+            <div className="product-grid" >
                 {currentProducts.map((product) => (
                     <div key={product._id} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
-                        <div>
-                            <img src={product.imageLink} alt={product.name} >
-                            
-                            </img>
-                        </div>
-                        <Link to={`/product/${product._id}`}>View Details</Link>
-                        <h3>{product.productName}</h3>
-                        <h3>{product.productDescription}</h3>
-                        <p>Price: ${product.price}</p>
-                        <button onClick={() => console.log('Add', product)}>Add</button>
-                        <Link to={`/product/edit/${product._id}`}>Edit</Link>
+                        <Link to={`/product/${product._id}`}>
+                            <img style={{margin: '5px'}} src={product.imageLink} alt={product.name} />
+                        </Link>
+                        <p>{product.productName}</p>
+                        <p style={{fontWeight: 'bold'}}>${product.price}</p>
+                        <button className="product-button" onClick={() => onClickAddProduct(product)}>Add</button>
+                        <button className="product-button" onClick={ () => handleEditClick(product)}>Edit</button>
                     </div>
                 ))}
             </div>
@@ -84,5 +120,7 @@ const ProductList = () => {
         (<div>error</div>)
     );
 };
-
-export default ProductList;
+const mapDispatchToProps = {
+    addToCart,
+};
+export default connect(null, mapDispatchToProps)(ProductList);
