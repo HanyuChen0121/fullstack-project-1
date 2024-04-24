@@ -48,12 +48,37 @@ code {
   width: 600px; /* Set width to 200px */
   height: auto;
 }
-.product-details{
-  margin-left: 100px;
+.product-details-container {
+  display: flex;
+  align-items: center;
+}
+
+.product-content {
+  display: flex;
+}
+
+.product-details {
+  margin-left: 20px; /* Adjust spacing between image and text */
+}
+.header-cart-text{
+  color: white;
+  margin: 10px;
+}
+@media screen and (max-width: 1000px) {
+  .product-content {
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .product-details {
+    margin-left: 0; /* Reset margin */
+    margin-top: 10px; /* Add spacing between image and text */
+    text-align: center;
+  }
 }
 @media screen and (max-width: 768px) {
   .product-grid {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjust item width for smaller screens */
   }
 }
-

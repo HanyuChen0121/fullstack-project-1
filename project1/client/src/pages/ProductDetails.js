@@ -5,11 +5,13 @@ import { connect } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../actions/cartActions';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 const ProductDetails = ({ products }) => {
     const navigate = useNavigate();
     const [product, setProduct] = useState(null);
     const { id } = useParams();
     const [isValid, setIsValid] = useState(true); // State to track image validity
+    const { userId } = useSelector(state => state.auth);
     const handleImageError = () => {
         setIsValid(false); // Set isValid state to false when image fails to load
     };
@@ -54,32 +56,36 @@ const ProductDetails = ({ products }) => {
         // Navigate to the edit product page
         navigate(`/product/edit/${product._id}`);
       };
-    return ( product !== null  && (
-        <div className='flex'>
-            <h1>Product Detail</h1>
-            <div style={{ display: 'flex' }}>
-                <div>  
-                    {isValid && (
-                        <img
-                           className='product-detial-img'
-                            src={product.imageLink}
-                            alt={product.productName}
-                            onError={handleImageError} // Call handleImageError when image fails to load
-                       />
-                    )}
-                </div>
-                <div className='product-details'>
-                    <p>Catagory1</p>
-                    <h2>{product.productName}</h2>
-                    <h2>${product.price}</h2>
-                    <h3>{product.productDescription}</h3>
-                    <p>Price: {product.price}</p>
-                    <button className="product-button" onClick={() => onClickAddProduct(product)}>Add to Cart</button>
-                    <button className="product-button" onClick={() => handleEditClick(product)}>Edit</button>
-                </div>
+      return (
+        product !== null && (
+          <div className='flex product-details-container'>
+            
+            <div className='product-content'>
+                
+              <div>
+                <h1>Product Detail</h1>
+                {isValid && (
+                  <img
+                    className='product-detial-img'
+                    src={product.imageLink}
+                    alt={product.productName}
+                    onError={handleImageError} // Call handleImageError when image fails to load
+                  />
+                )}
+              </div>
+              <div className='product-details'>
+                <p>Category1</p>
+                <h2>{product.productName}</h2>
+                <h2>${product.price}</h2>
+                <h3>{product.productDescription}</h3>
+                <p>Price: {product.price}</p>
+                <button className="product-button" onClick={() => onClickAddProduct(product)}>Add to Cart</button>
+                {userId && (<button className="product-button" onClick={() => handleEditClick(product)}>Edit</button>)}
+              </div>
             </div>
-        </div>)
-    );
+          </div>
+        )
+      );
 };
 const mapDispatchToProps = {
     addToCart,

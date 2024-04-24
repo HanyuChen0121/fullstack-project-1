@@ -177,7 +177,7 @@ const CreateProduct = () => {
                     </div>
                 )}
             </div>         
-            <button onClick={handleUploadClick} className='product-button'>Add Product</button>
+            <button style={{marginTop: '10px'}}onClick={handleUploadClick} className='product-button'>Add Product</button>
             {showError && (
                 <Alert variant="danger" onClose={() => setShowError(false)} dismissible>
                 <Alert.Heading>Error</Alert.Heading>

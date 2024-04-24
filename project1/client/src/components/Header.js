@@ -1,11 +1,13 @@
-import {React, useState} from 'react';
+import {React, useState, useEffect} from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { removeUser } from '../actions/authActions';
 import { Navbar, Nav, Container} from 'react-bootstrap';
+import { connect } from 'react-redux';
 import Cart from '../pages/Cart'; 
+import '../index.css';
+const Header = ({ totalPrice}) => {
 
-const Header = () => {
   // Use useSelector hook to get the state
   const { userId } = useSelector(state => state.auth);
   const dispatch = useDispatch();
@@ -36,6 +38,7 @@ const Header = () => {
 
             <Nav>
               <button className="product-button" variant="primary" onClick={handleOpenCart}>Cart</button>
+              {totalPrice ? (<span className="header-cart-text flex">${totalPrice}</span>) : ''}
               {userId ? (<Nav.Link className="ms-auto" onClick={handleSubmit} >Sign Out</Nav.Link>) : 
                         (<Nav.Link className="ms-auto" href="/signin">Sign In</Nav.Link>)}
             </Nav>
@@ -48,5 +51,9 @@ const Header = () => {
   );
 
 };
-
-export default Header;
+const mapStateToProps = (state) => {
+  return {
+      totalPrice: state.cart.totalPrice,
+  };
+};
+export default connect(mapStateToProps, null)(Header);

@@ -6,27 +6,18 @@ import Cart from './Cart';
 import { connect } from 'react-redux';
 import { addToCart } from '../actions/cartActions';
 import { useDispatch } from 'react-redux';
-
-const ProductList = () => {
+import { useSelector } from 'react-redux';
+import { Prev } from 'react-bootstrap/esm/PageItem';
+const ProductList = ({cartItems}) => {
 
     const dispatch = useDispatch();
     const [products, setProducts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [productsPerPage] = useState(10);
-    const [cartItems, setCartItems] = useState([]); // State to manage cart items
+    const [cartItem, setCartItem] = useState([]); // State to manage cart items
     const [showCart, setShowCart] = useState(false); // State to control cart modal visibility
-    const [quantity, setQuantity] = useState(0);
-    const handleDecreaseQuantity = () => {
-        // Decrease quantity by 1 if greater than 1
-        if (quantity >= 1) {
-            setQuantity(quantity - 1);
-        }
-    };
+    const { userId } = useSelector(state => state.auth);
 
-    const handleIncreaseQuantity = () => {
-        // Increase quantity by 1
-        setQuantity(quantity + 1);
-    };
     // Function to open cart modal
     const handleOpenCart = () => {
         setShowCart(true);
@@ -71,11 +62,13 @@ const ProductList = () => {
     const navigate = useNavigate();
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
-    const onClickAddProduct = (product) => {
-        console.log("printing productproduct");
-        console.log(product);
-        dispatch(addToCart(product));;
-    }
+    const handleFirstPage = () => {
+        setCurrentPage(1);
+    };
+
+    const handleLastPage = () => {
+        setCurrentPage(Math.ceil(products.length / productsPerPage));
+    };
     const onClickAddProductButton = () => {
         navigate('/CreateProduct');
     }
@@ -83,6 +76,26 @@ const ProductList = () => {
         // Navigate to the edit product page
         navigate(`/product/edit/${product._id}`);
       };
+    const getCartItemQuantity = (id) => {
+        const existingItemIndex = cartItems.findIndex(item => item.product._id === id);
+        if (existingItemIndex !== -1) {
+            return cartItems[existingItemIndex].quantity;
+        }
+        return 0;
+    }
+    const handleDecreaseQuantity = (product) => {
+        const existingItemIndex = cartItems.findIndex(item => item.product._id === product._id);
+
+        // Decrease quantity by 1 if greater than 1
+        if (existingItemIndex !== -1 && cartItems[existingItemIndex].quantity > 0) {
+            dispatch(addToCart(product, -1));
+        }
+    };
+
+    const handleIncreaseQuantity = (product) => {
+        // Increase quantity by 1
+        dispatch(addToCart(product, 1));
+    };
     return (
         products.length > 0 ? (
         <div className="flex" >
@@ -93,7 +106,7 @@ const ProductList = () => {
             </button>
 
             {/* Cart modal */}
-            <Cart cartItems={cartItems} show={showCart} handleClose={handleCloseCart} />
+            <Cart cartItems={cartItem} show={showCart} handleClose={handleCloseCart} />
             <div className="product-grid" >
                 {currentProducts.map((product) => (
                     <div key={product._id} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
@@ -101,26 +114,41 @@ const ProductList = () => {
                             <img style={{margin: '5px'}} src={product.imageLink} alt={product.name} />
                         </Link>
                         <p>{product.productName}</p>
+                        
                         <p style={{fontWeight: 'bold'}}>${product.price}</p>
-                        <button className="product-button" onClick={() => onClickAddProduct(product)}>Add</button>
-                        <button className="product-button" onClick={ () => handleEditClick(product)}>Edit</button>
+                        <button className="product-button" onClick={() => handleIncreaseQuantity(product)}>+</button>
+                        <span style={{ margin: '5px' }}>{getCartItemQuantity(product._id)}</span>
+                        <button className="product-button" onClick={() => handleDecreaseQuantity(product)}>-</button>
+                        {userId && (<button className="product-button" onClick={() => handleEditClick(product)}>Edit</button>) }
                     </div>
                 ))}
             </div>
             <ul className="pagination">
+                <li>
+                    <button className="product-button" onClick={handleFirstPage}> &lt;&lt;</button>
+                </li>
                 {Array.from({ length: Math.ceil(products.length / productsPerPage) }, (_, index) => (
                     <li key={index}>
                         <button className="product-button"onClick={() => paginate(index + 1)}>{index + 1}</button>
                     </li>
                 ))}
+                <li>
+                    <button className="product-button" onClick={handleLastPage}>&gt;&gt;</button>
+                </li>
             </ul>
             
         </div>
         ) :
-        (<div>error</div>)
+        (<div>Loading</div>)
     );
 };
 const mapDispatchToProps = {
     addToCart,
 };
-export default connect(null, mapDispatchToProps)(ProductList);
+const mapStateToProps = (state) => {
+    return {
+        cartItems: state.cart.cartItems,
+        totalPrice: state.cart.totalPrice,
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ProductList);

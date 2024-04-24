@@ -1,21 +1,32 @@
 import React, { useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { connect } from 'react-redux'; // Import connect
-import { updateTotalPrice, removeFromCart  } from '../actions/cartActions';
-
+import { updateTotalPrice, removeFromCart, addToCart  } from '../actions/cartActions';
+import { useDispatch } from 'react-redux';
 const Cart = ({ cartItems, handleClose, show, updateTotalPrice, totalPrice, removeFromCart  }) => {
-
+    const dispatch = useDispatch();
     useEffect(() => {
         // Calculate total price and update Redux store
         let total = 0;
         cartItems.forEach(item => {
-            total += item.price;
+            total += item.product.price * item.quantity;
         });
         updateTotalPrice(total); // Dispatch action to update total price
     }, [cartItems, updateTotalPrice]);
 
     const handleRemove = (itemId) => {
         removeFromCart(itemId); // Dispatch action to remove item from cart
+    };
+    const handleDecreaseQuantity = (item) => {
+        // Decrease quantity by 1 if greater than 1
+        if (item.quantity > 0) {
+            dispatch(addToCart(item.product, -1));
+        }
+    };
+
+    const handleIncreaseQuantity = (item) => {
+        // Increase quantity by 1
+        dispatch(addToCart(item.product, 1));
     };
     return (
         <Modal show={show} onHide={handleClose}>
@@ -26,11 +37,14 @@ const Cart = ({ cartItems, handleClose, show, updateTotalPrice, totalPrice, remo
                     <div>
                         {cartItems.map(item => (
                             <div key={item._id}>
-                                <img src={item.imageLink} alt={item.name} />
-                                <p>{item.productName}</p>
-                                <p>Price: ${item.price}</p>
-                                
-                                <button className="product-button" variant="danger" onClick={() => handleRemove(item._id)}>Remove</button> {/* Add remove button */}
+                                <img src={item.product.imageLink} alt={item.name} />
+                                <p>{item.product.productName}</p>
+                                <p>Price: ${item.product.price}</p>
+                               
+                                <button className="product-button" onClick={() => handleIncreaseQuantity(item)}>+</button>
+                                    <span style={{ margin: '5px' }}>{item.quantity}</span>
+                                <button className="product-button" onClick={() => handleDecreaseQuantity(item)}>-</button>
+                                <button className="product-button" variant="danger" onClick={() => handleRemove(item.product._id)}>Remove</button> {/* Add remove button */}
                                 <hr />
                             </div>
                         ))}
@@ -52,7 +66,6 @@ const Cart = ({ cartItems, handleClose, show, updateTotalPrice, totalPrice, remo
 };
 
 const mapStateToProps = (state) => {
-    console.log('Redux state:', state); // Add this line to check the structure of the Redux state
     return {
         cartItems: state.cart.cartItems,
         totalPrice: state.cart.totalPrice,
@@ -60,6 +73,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
+    addToCart,
     updateTotalPrice,
     removeFromCart,
 };

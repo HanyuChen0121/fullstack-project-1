@@ -3,10 +3,12 @@ export const cartActionTypes = {
     UPDATE_TOTAL_PRICE: 'UPDATE_TOTAL_PRICE',
     REMOVE_FROM_CART: 'REMOVE_FROM_CART'
   };
-export const addToCart = (product) => ({
-    type: cartActionTypes.ADD_TO_CART,
-    payload: product,
-});
+export const addToCart = (product, quantity) => {
+    return {
+        type: cartActionTypes.ADD_TO_CART,
+        payload: { product, quantity }, // Include both product and quantity in the payload
+    };
+};
 
 export const updateTotalPrice = (totalPrice) => ({
     type: cartActionTypes.UPDATE_TOTAL_PRICE,
