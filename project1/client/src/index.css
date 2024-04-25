@@ -64,7 +64,65 @@ code {
   color: white;
   margin: 10px;
 }
+.product-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.image-container {
+  margin-right: 10px;
+}
+
+.image-container img {
+  max-width: 100px; /* Adjust the width of the image */
+  height: auto; /* Maintain aspect ratio */
+}
+
+.info-container {
+  flex-grow: 1; /* Take up remaining space */
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+}
+.top-right-modal {
+  position: fixed;
+  top: 20px; /* Adjust the distance from the top of the screen */
+  right: 20px; /* Adjust the distance from the right of the screen */
+  z-index: 1050; /* Ensure the modal appears above other content */
+}
+.modal-content {
+  width: 50%;
+}
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+  .product-item {
+      flex-direction: column; /* Stack items vertically */
+      
+  }
+
+  .image-container {
+      margin-right: 0; /* Remove right margin for narrower layout */
+      margin-bottom: 10px; /* Add bottom margin to separate image from other content */
+  }
+
+  .info-container {
+      flex-grow: 0; /* Do not grow to fill remaining space */
+      width: 100%; /* Set width to 100% to take up full width */
+  }
+
+  .quantity-controls {
+      justify-content: center; /* Center quantity controls horizontally */
+  }
+
+  .product-button {
+      margin: 0 5px; /* Add horizontal margin to quantity buttons */
+  }
+}
 @media screen and (max-width: 1000px) {
+
   .product-content {
     text-align: center;
     flex-direction: column;

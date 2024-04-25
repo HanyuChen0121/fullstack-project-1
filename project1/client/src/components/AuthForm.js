@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setUser } from '../actions/authActions';
+import { setUser, setUserType } from '../actions/authActions';
 import { useNavigate } from 'react-router-dom';
 
 const AuthForm = ({ action }) => {
@@ -21,12 +21,13 @@ const AuthForm = ({ action }) => {
         const response = await fetch('http://localhost:5000/api/auth/signin', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
+          body: JSON.stringify({ email, password, type})
         });
 
         const data = await response.json();
         if (data.token) {
           dispatch(setUser(data.id, data.token));
+          dispatch(setUserType(data.type));
           navigate('/');      // Redirect to home page
         }else{
           setLoginError(data.message || 'Login failed. Please try again.');
@@ -46,6 +47,7 @@ const AuthForm = ({ action }) => {
       const data = await response.json();
       if (data.token) {
         dispatch(setUser(data.id, data.token));
+        dispatch(setUserType(data.type));
         navigate('/');      // Redirect to home page
       }
     }

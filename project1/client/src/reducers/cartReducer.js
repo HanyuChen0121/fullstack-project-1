@@ -21,12 +21,13 @@ const cartReducer = createReducer(initialState, (builder) => {
         // If it's a new product, add it to cartItems array
         state.cartItems.push({ product, quantity });
       }
+      localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
     })
     .addCase(cartActionTypes.UPDATE_TOTAL_PRICE, (state, action) => {
-      return {
-        ...state,
-        totalPrice: action.payload,
-      };
+     
+      state.totalPrice = action.payload;
+      localStorage.setItem('totalPrice', action.payload.toString());
+      
     })
     .addCase(cartActionTypes.REMOVE_FROM_CART, (state, action) => {
       return {

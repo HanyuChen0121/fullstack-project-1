@@ -6,20 +6,37 @@ import { useDispatch } from 'react-redux';
 import { addToCart } from '../actions/cartActions';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-const ProductDetails = ({ products }) => {
+const ProductDetails = ({ products, cartItems }) => {
     const navigate = useNavigate();
     const [product, setProduct] = useState(null);
     const { id } = useParams();
     const [isValid, setIsValid] = useState(true); // State to track image validity
     const { userId } = useSelector(state => state.auth);
+    const { userType } = useSelector(state => state.auth)
     const handleImageError = () => {
         setIsValid(false); // Set isValid state to false when image fails to load
     };
     const dispatch = useDispatch();
-    const onClickAddProduct = (product) => {
-        console.log(product)
-        dispatch(addToCart(product));;
+    const getCartItemQuantity = (id) => {
+      const existingItemIndex = cartItems.findIndex(item => item.product._id === id);
+      if (existingItemIndex !== -1) {
+          return cartItems[existingItemIndex].quantity;
+      }
+      return 0;
     }
+    const handleDecreaseQuantity = (product) => {
+      const existingItemIndex = cartItems.findIndex(item => item.product._id === product._id);
+
+      // Decrease quantity by 1 if greater than 1
+      if (existingItemIndex !== -1 && cartItems[existingItemIndex].quantity > 0) {
+          dispatch(addToCart(product, -1));
+      }
+    };
+
+    const handleIncreaseQuantity = (product) => {
+        // Increase quantity by 1
+        dispatch(addToCart(product, 1));
+    };
     useEffect(() => {
         const fetchData = async () => {
             try{
@@ -79,8 +96,10 @@ const ProductDetails = ({ products }) => {
                 <h2>${product.price}</h2>
                 <h3>{product.productDescription}</h3>
                 <p>Price: {product.price}</p>
-                <button className="product-button" onClick={() => onClickAddProduct(product)}>Add to Cart</button>
-                {userId && (<button className="product-button" onClick={() => handleEditClick(product)}>Edit</button>)}
+                <button className="product-button" onClick={() => handleIncreaseQuantity(product)}>+</button>
+                <span style={{ margin: '5px' }}>{getCartItemQuantity(product._id)}</span>
+                <button className="product-button" onClick={() => handleDecreaseQuantity(product)}>-</button>
+                {userId && userType === 'ADMIN' && (<button className="product-button" onClick={() => handleEditClick(product)}>Edit</button>)}
               </div>
             </div>
           </div>
@@ -88,6 +107,12 @@ const ProductDetails = ({ products }) => {
       );
 };
 const mapDispatchToProps = {
-    addToCart,
-}
-export default connect(null, mapDispatchToProps)(ProductDetails);
+  addToCart,
+};
+const mapStateToProps = (state) => {
+  return {
+      cartItems: state.cart.cartItems,
+      totalPrice: state.cart.totalPrice,
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ProductDetails);

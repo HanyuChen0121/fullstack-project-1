@@ -206,7 +206,7 @@ const EditProduct = (products) => {
             )}
             <br />
 
-            <button onClick={handleUploadClick}>Edit Product</button>
+            <button className="product-button" onClick={handleUploadClick}>Edit Product</button>
             {showError && (
                 <Alert variant="danger" onClose={() => setShowError(false)} dismissible>
                 <Alert.Heading>Error</Alert.Heading>

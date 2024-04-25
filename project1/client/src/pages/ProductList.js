@@ -14,9 +14,11 @@ const ProductList = ({cartItems}) => {
     const [products, setProducts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [productsPerPage] = useState(10);
+    const [sortDirection, setSortDirection] = useState('asc'); // Initial sorting direction: ascending
     const [cartItem, setCartItem] = useState([]); // State to manage cart items
     const [showCart, setShowCart] = useState(false); // State to control cart modal visibility
     const { userId } = useSelector(state => state.auth);
+    const { userType } = useSelector(state => state.auth)
 
     // Function to open cart modal
     const handleOpenCart = () => {
@@ -96,6 +98,28 @@ const ProductList = ({cartItems}) => {
         // Increase quantity by 1
         dispatch(addToCart(product, 1));
     };
+    
+
+// Function to toggle sorting direction
+    const toggleSortDirection = () => {
+        const newSortDirection = sortDirection === 'asc' ? 'desc' : 'asc'; // Toggle between 'asc' and 'desc'
+        setSortDirection(newSortDirection);
+    };
+
+    // Function to sort products by price
+    const sortProductsByPrice = () => {
+        const sortedProducts = [...products].sort((a, b) => {
+            if (sortDirection === 'asc') {
+                return a.price - b.price; // Ascending order
+            } else {
+                return b.price - a.price; // Descending order
+            }
+        });
+        setProducts(sortedProducts);
+    };
+    useEffect(() => {
+        sortProductsByPrice();
+    }, [sortDirection]);
     return (
         products.length > 0 ? (
         <div className="flex" >
@@ -107,6 +131,7 @@ const ProductList = ({cartItems}) => {
 
             {/* Cart modal */}
             <Cart cartItems={cartItem} show={showCart} handleClose={handleCloseCart} />
+            <button className="product-button" onClick={toggleSortDirection}>Sort by Price ({sortDirection === 'asc' ? 'Low to High' : 'High to Low'})</button>
             <div className="product-grid" >
                 {currentProducts.map((product) => (
                     <div key={product._id} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
@@ -119,7 +144,7 @@ const ProductList = ({cartItems}) => {
                         <button className="product-button" onClick={() => handleIncreaseQuantity(product)}>+</button>
                         <span style={{ margin: '5px' }}>{getCartItemQuantity(product._id)}</span>
                         <button className="product-button" onClick={() => handleDecreaseQuantity(product)}>-</button>
-                        {userId && (<button className="product-button" onClick={() => handleEditClick(product)}>Edit</button>) }
+                        {userId && userType === 'ADMIN' && (<button className="product-button" onClick={() => handleEditClick(product)}>Edit</button>) }
                     </div>
                 ))}
             </div>

@@ -7,7 +7,7 @@ const UpdatePasswordPage = () => {
       <div className="row justify-content-center">
         <div className="col-md-4">
             <h2 className="display-7 text-center">Update your password</h2>
-            <p class="fs-10">Enter your email, we will send you the recovery link</p>
+            <p className="fs-10">Enter your email, we will send you the recovery link</p>
             <AuthForm action="updatePassword" />
         </div>
       </div>

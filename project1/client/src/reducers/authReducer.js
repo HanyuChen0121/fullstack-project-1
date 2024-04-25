@@ -2,7 +2,8 @@ import { actionTypes } from '../actions/authActions';
 
 const initialState = {
   userId: null,
-  token: null
+  token: null,
+  userType:'REGULAR',
 };
 
 const authReducer = (state = initialState, action) => {
@@ -18,6 +19,11 @@ const authReducer = (state = initialState, action) => {
         ...state,
         userId: null,
         token: null
+      };
+    case actionTypes.SET_USER_TYPE:
+      return {
+        ...state,
+        userType: action.payload
       };
     default:
       return state;
